@@ -58,11 +58,12 @@ export default function CheckoutModal({
       discount,
       shippingFee,
       grandTotal,
+      status: 'Placed',
       estimatedDelivery: '3-4 Business Days'
     };
 
     setOrderInfo(createdOrder);
-    onOrderComplete();
+    onOrderComplete(createdOrder);
   };
 
   const handlePrintReceipt = () => {

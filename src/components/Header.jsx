@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
-import { ShoppingBag, Search, Flame, Menu, X, Sparkles, Truck } from './Icons';
+import { ShoppingBag, Search, Flame, Menu, X, Sparkles, Truck, Package } from './Icons';
 
-export default function Header({ cartCount, onOpenCart, searchFilter, setSearchFilter, activeCategory, setActiveCategory }) {
+export default function Header({ 
+  cartCount, 
+  onOpenCart, 
+  searchFilter, 
+  setSearchFilter, 
+  activeCategory, 
+  setActiveCategory,
+  receivedOrdersCount,
+  onOpenAdminOrders
+}) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -75,6 +84,30 @@ export default function Header({ cartCount, onOpenCart, searchFilter, setSearchF
 
         {/* Action Buttons */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+          
+          {/* Admin Orders Button */}
+          <button
+            onClick={onOpenAdminOrders}
+            className="btn btn-outline"
+            style={{ padding: '0.55rem 1rem', fontSize: '0.875rem', position: 'relative' }}
+            title="View Received Customer Orders"
+          >
+            <Package size={16} color="var(--color-primary)" />
+            <span>Orders Admin</span>
+            {receivedOrdersCount > 0 && (
+              <span style={{
+                background: 'var(--color-primary)',
+                color: '#ffffff',
+                fontSize: '0.75rem',
+                fontWeight: 800,
+                padding: '0.1rem 0.5rem',
+                borderRadius: 'var(--radius-full)'
+              }}>
+                {receivedOrdersCount}
+              </span>
+            )}
+          </button>
+
           <button 
             onClick={onOpenCart}
             className="btn btn-primary"

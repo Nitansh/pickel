@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import ProductCatalog from './components/ProductCatalog';
@@ -10,6 +10,29 @@ import Footer from './components/Footer';
 import ProductModal from './components/ProductModal';
 import CartDrawer from './components/CartDrawer';
 import CheckoutModal from './components/CheckoutModal';
+import AdminOrdersModal from './components/AdminOrdersModal';
+
+const INITIAL_SAMPLE_ORDER = {
+  orderId: 'PKL-849201',
+  date: '01 Aug 2026',
+  items: [
+    { name: 'Grandma’s Avakaya Raw Mango', sizeWeight: '250g', quantity: 2, price: 349 }
+  ],
+  customer: {
+    name: 'Priya Sharma',
+    email: 'priya.sharma@example.com',
+    phone: '9876543210',
+    address: 'Flat 402, Sunshine Heights, MG Road',
+    city: 'Bengaluru',
+    pincode: '560001'
+  },
+  paymentMethod: 'UPI',
+  subtotal: 698,
+  discount: 70,
+  shippingFee: 0,
+  grandTotal: 628,
+  status: 'Placed'
+};
 
 export default function App() {
   const [cartItems, setCartItems] = useState([
@@ -25,13 +48,33 @@ export default function App() {
     }
   ]);
 
+  const [receivedOrders, setReceivedOrders] = useState(() => {
+    try {
+      const saved = localStorage.getItem('pickel_received_orders');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {
+      // Fallback
+    }
+    return [INITIAL_SAMPLE_ORDER];
+  });
+
   const [cartDrawerOpen, setCartDrawerOpen] = useState(false);
   const [quickViewProduct, setQuickViewProduct] = useState(null);
   const [checkoutModalOpen, setCheckoutModalOpen] = useState(false);
+  const [adminOrdersModalOpen, setAdminOrdersModalOpen] = useState(false);
   
   const [searchFilter, setSearchFilter] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
   const [appliedCoupon, setAppliedCoupon] = useState('');
+
+  // Persist received orders to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem('pickel_received_orders', JSON.stringify(receivedOrders));
+    } catch (e) {
+      console.error('Failed to save orders to localStorage', e);
+    }
+  }, [receivedOrders]);
 
   // Cart total item count
   const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
@@ -118,8 +161,23 @@ export default function App() {
   };
 
   // Order complete callback
-  const handleOrderComplete = () => {
+  const handleOrderComplete = (newOrder) => {
+    if (newOrder) {
+      setReceivedOrders(prev => [newOrder, ...prev]);
+    }
     setCartItems([]);
+  };
+
+  // Update order status from admin panel
+  const handleUpdateOrderStatus = (orderId, newStatus) => {
+    setReceivedOrders(prev => prev.map(o => o.orderId === orderId ? { ...o, status: newStatus } : o));
+  };
+
+  // Clear all orders
+  const handleClearOrders = () => {
+    if (window.confirm('Are you sure you want to clear all received orders?')) {
+      setReceivedOrders([]);
+    }
   };
 
   const scrollToSection = (id) => {
@@ -138,6 +196,8 @@ export default function App() {
         setSearchFilter={setSearchFilter}
         activeCategory={activeCategory}
         setActiveCategory={setActiveCategory}
+        receivedOrdersCount={receivedOrders.length}
+        onOpenAdminOrders={() => setAdminOrdersModalOpen(true)}
       />
 
       {/* Hero Banner */}
@@ -197,6 +257,15 @@ export default function App() {
         cartItems={cartItems}
         appliedCoupon={appliedCoupon}
         onOrderComplete={handleOrderComplete}
+      />
+
+      {/* Admin Orders Received Dashboard Modal */}
+      <AdminOrdersModal 
+        isOpen={adminOrdersModalOpen}
+        onClose={() => setAdminOrdersModalOpen(false)}
+        orders={receivedOrders}
+        onUpdateOrderStatus={handleUpdateOrderStatus}
+        onClearOrders={handleClearOrders}
       />
 
     </div>
