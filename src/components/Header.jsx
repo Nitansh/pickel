@@ -9,7 +9,8 @@ export default function Header({
   activeCategory, 
   setActiveCategory,
   receivedOrdersCount,
-  onOpenAdminOrders
+  onOpenAdminOrders,
+  onOpenTrackOrder
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -84,6 +85,12 @@ export default function Header({
           <a href="#customizer" style={{ textDecoration: 'none', color: 'var(--color-primary)', fontWeight: 700, fontSize: '0.925rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
             <Sparkles size={16} /> Custom Jar
           </a>
+          <button 
+            onClick={onOpenTrackOrder}
+            style={{ textDecoration: 'none', color: 'var(--color-emerald)', fontWeight: 800, fontSize: '0.925rem', display: 'flex', alignItems: 'center', gap: '0.3rem', background: 'none', border: 'none', cursor: 'pointer' }}
+          >
+            <Package size={16} /> Track Order
+          </button>
           <a href="#subscription" style={{ textDecoration: 'none', color: 'var(--color-text-main)', fontWeight: 600, fontSize: '0.925rem' }}>Pickle Club</a>
           <a href="#reviews" style={{ textDecoration: 'none', color: 'var(--color-text-main)', fontWeight: 600, fontSize: '0.925rem' }}>Story & Reviews</a>
         </nav>

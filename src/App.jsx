@@ -11,6 +11,7 @@ import ProductModal from './components/ProductModal';
 import CartDrawer from './components/CartDrawer';
 import CheckoutModal from './components/CheckoutModal';
 import AdminOrdersModal from './components/AdminOrdersModal';
+import TrackOrderModal from './components/TrackOrderModal';
 
 const INITIAL_SAMPLE_ORDER = {
   orderId: 'PKL-849201',
@@ -21,12 +22,12 @@ const INITIAL_SAMPLE_ORDER = {
   customer: {
     name: 'Priya Sharma',
     email: 'priya.sharma@example.com',
-    phone: '9876543210',
+    phone: '9034716744',
     address: 'Flat 402, Sunshine Heights, MG Road',
     city: 'Bengaluru',
     pincode: '560001'
   },
-  paymentMethod: 'UPI',
+  paymentMethod: 'UPI (QR Code Scanner)',
   subtotal: 698,
   discount: 70,
   shippingFee: 0,
@@ -62,6 +63,7 @@ export default function App() {
   const [quickViewProduct, setQuickViewProduct] = useState(null);
   const [checkoutModalOpen, setCheckoutModalOpen] = useState(false);
   const [adminOrdersModalOpen, setAdminOrdersModalOpen] = useState(false);
+  const [trackOrderModalOpen, setTrackOrderModalOpen] = useState(false);
   
   const [searchFilter, setSearchFilter] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
@@ -217,6 +219,7 @@ export default function App() {
         setActiveCategory={setActiveCategory}
         receivedOrdersCount={receivedOrders.length}
         onOpenAdminOrders={() => setAdminOrdersModalOpen(true)}
+        onOpenTrackOrder={() => setTrackOrderModalOpen(true)}
       />
 
       {/* Hero Banner */}
@@ -278,7 +281,14 @@ export default function App() {
         onOrderComplete={handleOrderComplete}
       />
 
-      {/* Admin Orders Received Dashboard Modal (Accessible via /admin or #admin or Admin trigger) */}
+      {/* Track Order Modal */}
+      <TrackOrderModal 
+        isOpen={trackOrderModalOpen}
+        onClose={() => setTrackOrderModalOpen(false)}
+        orders={receivedOrders}
+      />
+
+      {/* Admin Orders Received Dashboard Modal (Accessible via /admin or #admin or Admin button) */}
       <AdminOrdersModal 
         isOpen={adminOrdersModalOpen}
         onClose={() => {
