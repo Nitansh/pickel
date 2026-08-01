@@ -67,15 +67,20 @@ export default function Footer() {
               📞 Helpline / Support: <a href="tel:9034716744" style={{ color: '#ffffff', textDecoration: 'none' }}>+91 9034716744</a>
             </div>
 
-            {/* Website QR Code Box */}
+            {/* Website QR Code & PDF Brochure Box */}
             <div style={{ background: '#ffffff', color: '#1c1917', padding: '0.8rem', borderRadius: 'var(--radius-md)', display: 'inline-flex', alignItems: 'center', gap: '0.8rem', border: '1px solid var(--color-card-border)' }}>
               <img src="/website_qr.png" alt="Scan Website QR Code" style={{ width: '70px', height: '70px', borderRadius: '6px' }} />
               <div style={{ textAlign: 'left' }}>
                 <div style={{ fontSize: '0.8rem', fontWeight: 900, color: 'var(--color-primary)' }}>Scan to Visit Store 🌶️</div>
                 <div style={{ fontSize: '0.7rem', color: '#78716c' }}>Scan with phone camera</div>
-                <a href="/website_qr.png" download="pickel_website_qr.png" style={{ fontSize: '0.7rem', color: 'var(--color-accent)', fontWeight: 800, textDecoration: 'underline', marginTop: '0.2rem', display: 'inline-block' }}>
-                  Download QR Code
-                </a>
+                <div style={{ display: 'flex', gap: '0.6rem', marginTop: '0.2rem' }}>
+                  <a href="/website_qr.png" download="pickel_website_qr.png" style={{ fontSize: '0.7rem', color: 'var(--color-accent)', fontWeight: 800, textDecoration: 'underline' }}>
+                    QR Code
+                  </a>
+                  <a href="/pickel_brochure.pdf" download="pickel_brochure.pdf" style={{ fontSize: '0.7rem', color: 'var(--color-primary)', fontWeight: 800, textDecoration: 'underline' }}>
+                    📄 Download PDF Brochure
+                  </a>
+                </div>
               </div>
             </div>
           </div>
