@@ -218,15 +218,8 @@ export default function CheckoutModal({
               </div>
 
               {/* Payment Method Selector */}
-              <div style={{ display: 'flex', gap: '0.6rem', marginBottom: '1.2rem' }}>
-                <label style={{ flex: 1, padding: '0.6rem', borderRadius: 'var(--radius-sm)', border: paymentMethod === 'upi' ? '2px solid var(--color-primary)' : '1px solid var(--color-card-border)', background: paymentMethod === 'upi' ? 'var(--color-primary-light)' : '#ffffff', cursor: 'pointer', textAlign: 'center', fontSize: '0.825rem', fontWeight: 800 }}>
-                  <input type="radio" name="payment" checked={paymentMethod === 'upi'} onChange={() => setPaymentMethod('upi')} style={{ marginRight: '0.3rem' }} />
-                  UPI Scanner
-                </label>
-                <label style={{ flex: 1, padding: '0.6rem', borderRadius: 'var(--radius-sm)', border: paymentMethod === 'cod' ? '2px solid var(--color-primary)' : '1px solid var(--color-card-border)', background: paymentMethod === 'cod' ? 'var(--color-primary-light)' : '#ffffff', cursor: 'pointer', textAlign: 'center', fontSize: '0.825rem', fontWeight: 800 }}>
-                  <input type="radio" name="payment" checked={paymentMethod === 'cod'} onChange={() => setPaymentMethod('cod')} style={{ marginRight: '0.3rem' }} />
-                  Cash on Delivery
-                </label>
+              <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', color: 'var(--color-emerald)', padding: '0.6rem 1rem', borderRadius: 'var(--radius-sm)', textAlign: 'center', fontSize: '0.85rem', fontWeight: 800, marginBottom: '1.2rem' }}>
+                ✓ Instant UPI Payment via QR Scanner (GPay, PhonePe, Paytm)
               </div>
 
               {/* Transaction Ref Input */}
