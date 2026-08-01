@@ -38,7 +38,7 @@ export default function App() {
   const [cartItems, setCartItems] = useState([
     {
       cartId: 'default-1',
-      id: 'p1',
+      id: 'mango-avakaya',
       name: 'Grandma’s Avakaya Raw Mango',
       price: 349,
       sizeWeight: '250g',
@@ -66,6 +66,25 @@ export default function App() {
   const [searchFilter, setSearchFilter] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
   const [appliedCoupon, setAppliedCoupon] = useState('');
+
+  // Detect URL Route for /admin or #admin
+  useEffect(() => {
+    const checkAdminRoute = () => {
+      const hash = window.location.hash.toLowerCase();
+      const path = window.location.pathname.toLowerCase();
+      if (hash === '#admin' || path === '/admin' || path.endsWith('/admin')) {
+        setAdminOrdersModalOpen(true);
+      }
+    };
+
+    checkAdminRoute();
+    window.addEventListener('hashchange', checkAdminRoute);
+    window.addEventListener('popstate', checkAdminRoute);
+    return () => {
+      window.removeEventListener('hashchange', checkAdminRoute);
+      window.removeEventListener('popstate', checkAdminRoute);
+    };
+  }, []);
 
   // Persist received orders to localStorage
   useEffect(() => {
@@ -259,10 +278,15 @@ export default function App() {
         onOrderComplete={handleOrderComplete}
       />
 
-      {/* Admin Orders Received Dashboard Modal */}
+      {/* Admin Orders Received Dashboard Modal (Accessible via /admin or #admin or Admin trigger) */}
       <AdminOrdersModal 
         isOpen={adminOrdersModalOpen}
-        onClose={() => setAdminOrdersModalOpen(false)}
+        onClose={() => {
+          setAdminOrdersModalOpen(false);
+          if (window.location.hash === '#admin') {
+            window.history.pushState('', document.title, window.location.pathname + window.location.search);
+          }
+        }}
         orders={receivedOrders}
         onUpdateOrderStatus={handleUpdateOrderStatus}
         onClearOrders={handleClearOrders}

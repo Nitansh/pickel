@@ -16,10 +16,16 @@ export default function Header({
   return (
     <header style={{ position: 'sticky', top: 0, zIndex: 50, background: 'rgba(250, 248, 245, 0.95)', backdropFilter: 'blur(10px)', borderBottom: '1px solid var(--color-card-border)' }}>
       {/* Top Banner */}
-      <div style={{ background: 'linear-gradient(90deg, #991b1b 0%, #d97706 50%, #15803d 100%)', color: '#ffffff', padding: '0.4rem 1rem', fontSize: '0.825rem', fontWeight: 600, textAlign: 'center' }}>
-        <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-          <Truck size={14} />
-          <span>FREE SHIPPING across India on orders above ₹499! Use code <strong style={{ textDecoration: 'underline', color: '#fef08a' }}>PICKLE10</strong> for 10% Off</span>
+      <div style={{ background: 'linear-gradient(90deg, #991b1b 0%, #d97706 50%, #15803d 100%)', color: '#ffffff', padding: '0.45rem 1rem', fontSize: '0.825rem', fontWeight: 600, textAlign: 'center' }}>
+        <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1.2rem', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+            <Truck size={14} />
+            <span>FREE SHIPPING across India above ₹499! Use code <strong style={{ textDecoration: 'underline', color: '#fef08a' }}>PICKLE10</strong></span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', background: 'rgba(0,0,0,0.2)', padding: '0.15rem 0.6rem', borderRadius: 'var(--radius-full)', fontWeight: 800 }}>
+            <span>📞 Helpline: </span>
+            <a href="tel:9034716744" style={{ color: '#ffffff', textDecoration: 'none' }}>+91 9034716744</a>
+          </div>
         </div>
       </div>
 

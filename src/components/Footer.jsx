@@ -63,6 +63,9 @@ export default function Footer() {
             <p style={{ color: '#a8a29e', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1rem' }}>
               Authentic artisanal pickles sun-dried under traditional age-old heritage recipes. 100% natural, preservative-free.
             </p>
+            <div style={{ fontSize: '0.875rem', fontWeight: 700, color: '#fef08a', background: 'rgba(255,255,255,0.08)', padding: '0.5rem 0.8rem', borderRadius: 'var(--radius-sm)', display: 'inline-block' }}>
+              📞 Helpline / Support: <a href="tel:9034716744" style={{ color: '#ffffff', textDecoration: 'none' }}>+91 9034716744</a>
+            </div>
           </div>
 
           {/* Quick Links */}

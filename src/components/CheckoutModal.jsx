@@ -314,6 +314,9 @@ export default function CheckoutModal({
                   <span>Total Amount Paid</span>
                   <span>₹{orderInfo.grandTotal} ({orderInfo.paymentMethod})</span>
                 </div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '0.4rem', textAlign: 'center' }}>
+                  Need order support? Call Helpline: <strong>+91 9034716744</strong>
+                </div>
               </div>
 
               <div style={{ display: 'flex', gap: '1rem' }}>
