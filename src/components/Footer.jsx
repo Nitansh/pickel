@@ -63,8 +63,20 @@ export default function Footer() {
             <p style={{ color: '#a8a29e', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1rem' }}>
               Authentic artisanal pickles sun-dried under traditional age-old heritage recipes. 100% natural, preservative-free.
             </p>
-            <div style={{ fontSize: '0.875rem', fontWeight: 700, color: '#fef08a', background: 'rgba(255,255,255,0.08)', padding: '0.5rem 0.8rem', borderRadius: 'var(--radius-sm)', display: 'inline-block' }}>
+            <div style={{ fontSize: '0.875rem', fontWeight: 700, color: '#fef08a', background: 'rgba(255,255,255,0.08)', padding: '0.5rem 0.8rem', borderRadius: 'var(--radius-sm)', display: 'inline-block', marginBottom: '1rem' }}>
               📞 Helpline / Support: <a href="tel:9034716744" style={{ color: '#ffffff', textDecoration: 'none' }}>+91 9034716744</a>
+            </div>
+
+            {/* Website QR Code Box */}
+            <div style={{ background: '#ffffff', color: '#1c1917', padding: '0.8rem', borderRadius: 'var(--radius-md)', display: 'inline-flex', alignItems: 'center', gap: '0.8rem', border: '1px solid var(--color-card-border)' }}>
+              <img src="/website_qr.png" alt="Scan Website QR Code" style={{ width: '70px', height: '70px', borderRadius: '6px' }} />
+              <div style={{ textAlign: 'left' }}>
+                <div style={{ fontSize: '0.8rem', fontWeight: 900, color: 'var(--color-primary)' }}>Scan to Visit Store 🌶️</div>
+                <div style={{ fontSize: '0.7rem', color: '#78716c' }}>Scan with phone camera</div>
+                <a href="/website_qr.png" download="pickel_website_qr.png" style={{ fontSize: '0.7rem', color: 'var(--color-accent)', fontWeight: 800, textDecoration: 'underline', marginTop: '0.2rem', display: 'inline-block' }}>
+                  Download QR Code
+                </a>
+              </div>
             </div>
           </div>
 
