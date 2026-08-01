@@ -73,12 +73,15 @@ export default function Footer() {
               <div style={{ textAlign: 'left' }}>
                 <div style={{ fontSize: '0.8rem', fontWeight: 900, color: 'var(--color-primary)' }}>Scan to Visit Store 🌶️</div>
                 <div style={{ fontSize: '0.7rem', color: '#78716c' }}>Scan with phone camera</div>
-                <div style={{ display: 'flex', gap: '0.6rem', marginTop: '0.2rem' }}>
+                <div style={{ display: 'flex', gap: '0.6rem', marginTop: '0.3rem', flexWrap: 'wrap' }}>
                   <a href="/website_qr.png" download="pickel_website_qr.png" style={{ fontSize: '0.7rem', color: 'var(--color-accent)', fontWeight: 800, textDecoration: 'underline' }}>
                     QR Code
                   </a>
                   <a href="/pickel_brochure.pdf" download="pickel_brochure.pdf" style={{ fontSize: '0.7rem', color: 'var(--color-primary)', fontWeight: 800, textDecoration: 'underline' }}>
-                    📄 Download PDF Brochure
+                    📄 PDF Brochure
+                  </a>
+                  <a href="/pickel_catalog_poster.png" download="pickel_catalog_poster.png" style={{ fontSize: '0.7rem', color: 'var(--color-emerald)', fontWeight: 800, textDecoration: 'underline' }}>
+                    🖼️ Postcard / Poster
                   </a>
                 </div>
               </div>
