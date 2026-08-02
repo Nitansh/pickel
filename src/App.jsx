@@ -13,6 +13,13 @@ import CheckoutModal from './components/CheckoutModal';
 import AdminOrdersModal from './components/AdminOrdersModal';
 import TrackOrderModal from './components/TrackOrderModal';
 
+import { 
+  fetchCloudOrders, 
+  saveCloudOrder, 
+  updateCloudOrderStatus, 
+  clearCloudOrders 
+} from './services/ordersApi';
+
 const INITIAL_SAMPLE_ORDER = {
   orderId: 'PKL-849201',
   date: '01 Aug 2026',
@@ -49,15 +56,7 @@ export default function App() {
     }
   ]);
 
-  const [receivedOrders, setReceivedOrders] = useState(() => {
-    try {
-      const saved = localStorage.getItem('pickel_received_orders');
-      if (saved) return JSON.parse(saved);
-    } catch (e) {
-      // Fallback
-    }
-    return [INITIAL_SAMPLE_ORDER];
-  });
+  const [receivedOrders, setReceivedOrders] = useState([INITIAL_SAMPLE_ORDER]);
 
   const [cartDrawerOpen, setCartDrawerOpen] = useState(false);
   const [quickViewProduct, setQuickViewProduct] = useState(null);
@@ -68,6 +67,29 @@ export default function App() {
   const [searchFilter, setSearchFilter] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
   const [appliedCoupon, setAppliedCoupon] = useState('');
+
+  // Initial load and Real-time Polling for Cloud Server Orders (Every 4 seconds)
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadOrdersFromCloud = async () => {
+      const orders = await fetchCloudOrders();
+      if (isMounted && orders && Array.isArray(orders) && orders.length > 0) {
+        setReceivedOrders(orders);
+      }
+    };
+
+    loadOrdersFromCloud();
+
+    const interval = setInterval(() => {
+      loadOrdersFromCloud();
+    }, 4000); // Poll cloud server every 4 seconds
+
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
 
   // Detect URL Route for /admin or #admin
   useEffect(() => {
@@ -87,15 +109,6 @@ export default function App() {
       window.removeEventListener('popstate', checkAdminRoute);
     };
   }, []);
-
-  // Persist received orders to localStorage
-  useEffect(() => {
-    try {
-      localStorage.setItem('pickel_received_orders', JSON.stringify(receivedOrders));
-    } catch (e) {
-      console.error('Failed to save orders to localStorage', e);
-    }
-  }, [receivedOrders]);
 
   // Cart total item count
   const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
@@ -181,23 +194,32 @@ export default function App() {
     setCheckoutModalOpen(true);
   };
 
-  // Order complete callback
-  const handleOrderComplete = (newOrder) => {
+  // Order complete callback (Syncs newly placed order to Cloud Server Database!)
+  const handleOrderComplete = async (newOrder) => {
     if (newOrder) {
       setReceivedOrders(prev => [newOrder, ...prev]);
+      const updated = await saveCloudOrder(newOrder);
+      if (updated && updated.length > 0) {
+        setReceivedOrders(updated);
+      }
     }
     setCartItems([]);
   };
 
-  // Update order status from admin panel
-  const handleUpdateOrderStatus = (orderId, newStatus) => {
+  // Update order status from admin panel (Syncs to Cloud Server!)
+  const handleUpdateOrderStatus = async (orderId, newStatus) => {
     setReceivedOrders(prev => prev.map(o => o.orderId === orderId ? { ...o, status: newStatus } : o));
+    const updated = await updateCloudOrderStatus(orderId, newStatus);
+    if (updated && updated.length > 0) {
+      setReceivedOrders(updated);
+    }
   };
 
   // Clear all orders
-  const handleClearOrders = () => {
+  const handleClearOrders = async () => {
     if (window.confirm('Are you sure you want to clear all received orders?')) {
       setReceivedOrders([]);
+      await clearCloudOrders();
     }
   };
 
