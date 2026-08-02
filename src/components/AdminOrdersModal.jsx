@@ -8,16 +8,18 @@ export default function AdminOrdersModal({ isOpen, onClose, orders, onUpdateOrde
   const [statusFilter, setStatusFilter] = useState('all');
 
   const filteredOrders = orders.filter(order => {
+    if (!order) return false;
     if (statusFilter !== 'all' && (order.status || 'Placed') !== statusFilter) return false;
     if (search.trim() !== '') {
       const q = search.toLowerCase();
-      const matchId = order.orderId.toLowerCase().includes(q);
-      const matchName = order.customer.name.toLowerCase().includes(q);
-      const matchPhone = order.customer.phone.includes(q);
+      const matchId = order.orderId ? order.orderId.toLowerCase().includes(q) : false;
+      const matchName = order.customer && order.customer.name ? order.customer.name.toLowerCase().includes(q) : false;
+      const matchPhone = order.customer && order.customer.phone ? String(order.customer.phone).includes(q) : false;
       if (!matchId && !matchName && !matchPhone) return false;
     }
     return true;
   });
+
 
   const handleExportCSV = () => {
     if (orders.length === 0) return;

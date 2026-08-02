@@ -98,6 +98,38 @@ export default function Header({
         {/* Action Buttons */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
           
+          <button
+            onClick={onOpenAdminOrders}
+            className="btn btn-outline"
+            style={{ 
+              padding: '0.55rem 0.95rem', 
+              fontSize: '0.85rem', 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '0.4rem', 
+              borderColor: 'var(--color-primary)', 
+              color: 'var(--color-primary)',
+              background: '#ffffff',
+              fontWeight: 800
+            }}
+            title="Admin Orders Dashboard"
+          >
+            <Package size={16} />
+            <span>Admin</span>
+            {receivedOrdersCount > 0 && (
+              <span style={{ 
+                background: 'var(--color-primary)', 
+                color: '#ffffff', 
+                fontSize: '0.7rem', 
+                fontWeight: 900, 
+                padding: '0.1rem 0.45rem', 
+                borderRadius: 'var(--radius-full)' 
+              }}>
+                {receivedOrdersCount}
+              </span>
+            )}
+          </button>
+
           <button 
             onClick={onOpenCart}
             className="btn btn-primary"
@@ -128,6 +160,7 @@ export default function Header({
             )}
           </button>
         </div>
+
 
       </div>
     </header>

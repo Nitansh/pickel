@@ -74,7 +74,7 @@ export default function App() {
 
     const loadOrdersFromCloud = async () => {
       const orders = await fetchCloudOrders();
-      if (isMounted && orders && Array.isArray(orders) && orders.length > 0) {
+      if (isMounted && orders && Array.isArray(orders)) {
         setReceivedOrders(orders);
       }
     };
@@ -90,6 +90,7 @@ export default function App() {
       clearInterval(interval);
     };
   }, []);
+
 
   // Detect URL Route for /admin or #admin
   useEffect(() => {
@@ -210,7 +211,7 @@ export default function App() {
   const handleUpdateOrderStatus = async (orderId, newStatus) => {
     setReceivedOrders(prev => prev.map(o => o.orderId === orderId ? { ...o, status: newStatus } : o));
     const updated = await updateCloudOrderStatus(orderId, newStatus);
-    if (updated && updated.length > 0) {
+    if (updated && Array.isArray(updated) && updated.length > 0) {
       setReceivedOrders(updated);
     }
   };
@@ -222,6 +223,7 @@ export default function App() {
       await clearCloudOrders();
     }
   };
+
 
   const scrollToSection = (id) => {
     const el = document.getElementById(id);

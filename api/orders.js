@@ -26,7 +26,7 @@ let memoryOrders = [
 export default function handler(req, res) {
   // Enable CORS for cross-origin mobile apps
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === 'OPTIONS') {
@@ -37,10 +37,26 @@ export default function handler(req, res) {
     return res.status(200).json(memoryOrders);
   }
 
+  if (req.method === 'PUT' || (req.method === 'POST' && req.body?.action === 'update_status')) {
+    const { orderId, status } = req.body || {};
+    if (orderId && status) {
+      memoryOrders = memoryOrders.map(o => o.orderId === orderId ? { ...o, status } : o);
+      return res.status(200).json({ success: true, orders: memoryOrders });
+    }
+  }
+
+  if (req.method === 'DELETE' || (req.method === 'POST' && req.body?.action === 'clear')) {
+    memoryOrders = [];
+    return res.status(200).json({ success: true, orders: [] });
+  }
+
   if (req.method === 'POST') {
     const newOrder = req.body;
     if (newOrder && newOrder.orderId) {
-      if (!memoryOrders.some(o => o.orderId === newOrder.orderId)) {
+      const existingIdx = memoryOrders.findIndex(o => o.orderId === newOrder.orderId);
+      if (existingIdx >= 0) {
+        memoryOrders[existingIdx] = newOrder;
+      } else {
         memoryOrders.unshift(newOrder);
       }
       return res.status(200).json({ success: true, orders: memoryOrders });
@@ -50,3 +66,4 @@ export default function handler(req, res) {
 
   return res.status(405).json({ error: 'Method not allowed' });
 }
+
