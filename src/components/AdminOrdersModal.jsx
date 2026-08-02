@@ -1,11 +1,127 @@
 import React, { useState } from 'react';
-import { X, Package, Search, Trash2, Download, Truck, MapPin, Phone, Mail } from './Icons';
+import { X, Package, Search, Trash2, Download, Truck, MapPin, Phone, Mail, Lock } from './Icons';
+
+const ADMIN_PASSWORD = 'nitansh.bareja@gmail.com';
 
 export default function AdminOrdersModal({ isOpen, onClose, orders, onUpdateOrderStatus, onClearOrders }) {
   if (!isOpen) return null;
 
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    try {
+      return sessionStorage.getItem('pickel_admin_auth') === 'true';
+    } catch(e) {
+      return false;
+    }
+  });
+
+  const [passwordInput, setPasswordInput] = useState('');
+  const [authError, setAuthError] = useState('');
+
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (passwordInput.trim() === ADMIN_PASSWORD) {
+      setIsAuthenticated(true);
+      setAuthError('');
+      try {
+        sessionStorage.setItem('pickel_admin_auth', 'true');
+      } catch(e) {}
+    } else {
+      setAuthError('Invalid Admin Password. Access Denied.');
+    }
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setPasswordInput('');
+    try {
+      sessionStorage.removeItem('pickel_admin_auth');
+    } catch(e) {}
+  };
+
+  // Unauthenticated Login Modal View
+  if (!isAuthenticated) {
+    return (
+      <div className="modal-overlay" onClick={onClose}>
+        <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '440px', padding: 0, overflow: 'hidden' }}>
+          
+          {/* Top Header */}
+          <div style={{ padding: '1.2rem 1.5rem', background: 'var(--color-bg)', borderBottom: '1px solid var(--color-card-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+              <div style={{ background: 'var(--color-primary-light)', padding: '0.5rem', borderRadius: '50%', display: 'flex' }}>
+                <Lock size={20} color="var(--color-primary)" />
+              </div>
+              <div>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 900, color: 'var(--color-primary-dark)', margin: 0 }}>
+                  Admin Authorization
+                </h3>
+                <div style={{ fontSize: '0.725rem', color: 'var(--color-text-muted)', fontWeight: 700 }}>
+                  Restricted access area
+                </div>
+              </div>
+            </div>
+
+            <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text-muted)' }}>
+              <X size={22} />
+            </button>
+          </div>
+
+          {/* Login Form Body */}
+          <form onSubmit={handleLogin} style={{ padding: '2rem 1.8rem' }}>
+            <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+              <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>🔒</div>
+              <h4 style={{ fontSize: '1.2rem', fontWeight: 900, color: 'var(--color-text-main)', marginBottom: '0.4rem' }}>
+                Enter Admin Password
+              </h4>
+              <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', margin: 0 }}>
+                Please authenticate with your master admin email/password to manage store orders.
+              </p>
+            </div>
+
+            {authError && (
+              <div style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', padding: '0.65rem 0.9rem', borderRadius: 'var(--radius-sm)', fontSize: '0.825rem', fontWeight: 700, marginBottom: '1.2rem', textAlign: 'center' }}>
+                ⚠️ {authError}
+              </div>
+            )}
+
+            <div style={{ marginBottom: '1.4rem' }}>
+              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: 'var(--color-text-main)', marginBottom: '0.4rem' }}>
+                Password:
+              </label>
+              <input
+                type="password"
+                required
+                autoFocus
+                placeholder="Enter password..."
+                value={passwordInput}
+                onChange={(e) => {
+                  setPasswordInput(e.target.value);
+                  if (authError) setAuthError('');
+                }}
+                style={{
+                  width: '100%',
+                  padding: '0.75rem 1rem',
+                  borderRadius: 'var(--radius-sm)',
+                  border: '1.5px solid var(--color-card-border)',
+                  fontSize: '0.95rem',
+                  fontWeight: 700,
+                  outline: 'none'
+                }}
+              />
+            </div>
+
+            <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '0.75rem', justifyContent: 'center', fontSize: '0.95rem' }}>
+              <Lock size={18} />
+              <span>Unlock Admin Dashboard</span>
+            </button>
+          </form>
+
+        </div>
+      </div>
+    );
+  }
 
   const filteredOrders = orders.filter(order => {
     if (!order) return false;
@@ -19,7 +135,6 @@ export default function AdminOrdersModal({ isOpen, onClose, orders, onUpdateOrde
     }
     return true;
   });
-
 
   const handleExportCSV = () => {
     if (orders.length === 0) return;
@@ -56,9 +171,16 @@ export default function AdminOrdersModal({ isOpen, onClose, orders, onUpdateOrde
             </div>
           </div>
 
-          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text-muted)' }}>
-            <X size={22} />
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+            <button onClick={handleLogout} className="btn btn-ghost" style={{ fontSize: '0.75rem', color: '#dc2626', padding: '0.3rem 0.6rem' }} title="Lock Dashboard">
+              <Lock size={14} />
+              <span>Lock</span>
+            </button>
+
+            <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text-muted)' }}>
+              <X size={22} />
+            </button>
+          </div>
         </div>
 
         {/* Toolbar */}
@@ -211,3 +333,4 @@ export default function AdminOrdersModal({ isOpen, onClose, orders, onUpdateOrde
     </div>
   );
 }
+
