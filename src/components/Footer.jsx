@@ -116,7 +116,19 @@ export default function Footer() {
                 <span>Zero Artificial Colors or Flavors</span>
               </div>
             </div>
+
+            {/* FSSAI Certification Badge */}
+            <div style={{ marginTop: '1.2rem', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', padding: '0.65rem 0.9rem', borderRadius: 'var(--radius-sm)', display: 'flex', alignItems: 'center', gap: '0.7rem' }}>
+              <div style={{ background: '#ffffff', color: '#15803d', padding: '0.2rem 0.5rem', borderRadius: '4px', fontWeight: 900, fontSize: '0.8rem', letterSpacing: '0.05em' }}>
+                fssai
+              </div>
+              <div>
+                <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#ffffff' }}>FSSAI Licensed & Certified</div>
+                <div style={{ fontSize: '0.7rem', color: '#fef08a', fontWeight: 700 }}>Lic No: 10826999000349</div>
+              </div>
+            </div>
           </div>
+
 
         </div>
 

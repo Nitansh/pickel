@@ -4,10 +4,12 @@
 
 ---
 
-## 📞 Order Hotline & Customer Support
+## 📞 Order Hotline & Legal Compliance
 - **Helpline / WhatsApp**: **+91 9034716744**
 - **Website**: [https://pickel.vercel.app](https://pickel.vercel.app)
+- **FSSAI License No.**: **10826999000349** (Food Safety Certified)
 - **UPI Scanner Payment**: `9034716744@ybl`
+
 
 ---
 
