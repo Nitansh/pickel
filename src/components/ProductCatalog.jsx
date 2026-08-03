@@ -59,9 +59,10 @@ export default function ProductCatalog({
           </div>
           <h2 style={{ fontSize: '2.4rem', fontWeight: 900 }}>The Pickle Pantry</h2>
           <p style={{ color: 'var(--color-text-muted)', fontSize: '1rem', maxWidth: '640px', margin: '0.5rem auto 0 auto' }}>
-            Sun-cured in small batches. <strong>Base Price ₹200 / 250g</strong> + <strong>₹1 per kg for every 4 days of aging</strong> for maximum depth & vintage flavor!
+            Sun-cured in small batches. <strong>Base Price ₹200 / 250g</strong> + <strong>₹1 per kg for every day of aging</strong> for maximum depth & vintage flavor!
           </p>
         </div>
+
 
         {/* Category Tabs & Spice Filter Toolbar */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem', marginBottom: '2.5rem' }}>
@@ -218,8 +219,9 @@ export default function ProductCatalog({
 
                     {/* Age Pricing Explanation Banner */}
                     <div style={{ background: '#fefce8', border: '1px solid #fef08a', borderRadius: 'var(--radius-sm)', padding: '0.4rem 0.6rem', fontSize: '0.725rem', color: '#854d0e', marginBottom: '0.9rem', fontWeight: 700 }}>
-                      🏷️ Base ₹200 (250g) + ₹{currentSize.ageSurcharge || 0} aging (+₹1/kg per 4d)
+                      🏷️ Base ₹200 (250g) + ₹{currentSize.ageSurcharge || 0} aging (+₹1/kg per day)
                     </div>
+
 
 
 

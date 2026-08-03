@@ -63,17 +63,18 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
                 <span>Vintage Aging Value Calculation</span>
               </span>
               <span style={{ background: '#b45309', color: '#ffffff', padding: '0.15rem 0.5rem', borderRadius: 'var(--radius-full)', fontSize: '0.7rem' }}>
-                +₹1/kg per 4 Days
+                +₹1/kg per Day
               </span>
             </div>
 
             <div style={{ fontSize: '0.825rem', lineHeight: 1.5, color: '#854d0e' }}>
               • <strong>Base Price:</strong> ₹200 for 250g (₹800/kg base)<br />
-              • <strong>Sun-Cured Maturation ({product.agedDays} Days):</strong> +₹{ageSurchargePerKg}/kg (+₹1/kg for every 4 days passed)<br />
+              • <strong>Sun-Cured Maturation ({product.agedDays} Days):</strong> +₹{ageSurchargePerKg}/kg (+₹1/kg for every day passed)<br />
               • <strong>Selected {selectedSize.weight} Price:</strong> ₹{selectedSize.basePrice} base + ₹{selectedSize.ageSurcharge} aging = <strong>₹{selectedSize.price}</strong><br />
               • <strong>Batch Quantity Available:</strong> <span style={{ color: '#991b1b', fontWeight: 900 }}>{product.stockKg || 10} kg available in current batch</span>
             </div>
           </div>
+
 
 
 

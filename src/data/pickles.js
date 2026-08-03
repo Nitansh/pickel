@@ -1,5 +1,5 @@
 export const BASE_PRICE_250G = 200;
-export const DAYS_PER_RUPEE = 4;
+export const DAYS_PER_RUPEE = 1; // 1 RS per kg for every 1 day passed
 
 // Initial reference date: August 3, 2026
 export const INITIAL_REFERENCE_DATE_MS = new Date('2026-08-03T00:00:00+05:30').getTime();
@@ -12,7 +12,7 @@ export function getDynamicallyAgedDays(initialAgedDays) {
 }
 
 export function calculateAgeSurchargePerKg(agedDays) {
-  return Math.floor((agedDays || 0) / DAYS_PER_RUPEE);
+  return Math.floor(agedDays || 0); // 1 RS per kg per day (e.g. 48 days = +₹48/kg)
 }
 
 export function getProductSizes(product) {
@@ -42,6 +42,7 @@ export function getProductSizes(product) {
     }
   ];
 }
+
 
 export function getProductPrice(product, sizeWeight = '250g') {
   const sizes = getProductSizes(product);
