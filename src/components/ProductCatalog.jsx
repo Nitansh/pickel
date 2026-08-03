@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { PICKLE_CATEGORIES, PICKLE_PRODUCTS } from '../data/pickles';
-import { Flame, Star, Eye, ShoppingBag, Filter, Check } from './Icons';
+import { PICKLE_CATEGORIES, PICKLE_PRODUCTS, BASE_PRICE_PER_KG, calculateAgeSurchargePerKg, calculate1KgPrice } from '../data/pickles';
+import { Flame, Star, Eye, ShoppingBag, Filter, Check, Package, Sun } from './Icons';
 
 export default function ProductCatalog({ 
   searchFilter, 
@@ -58,8 +58,8 @@ export default function ProductCatalog({
             Handcrafted Selection
           </div>
           <h2 style={{ fontSize: '2.4rem', fontWeight: 900 }}>The Pickle Pantry</h2>
-          <p style={{ color: 'var(--color-text-muted)', fontSize: '1rem', maxWidth: '560px', margin: '0.5rem auto 0 auto' }}>
-            Choose from traditional sun-dried Indian classics, wild fermented global kimchi, or fiery artisanal chili crisp oils.
+          <p style={{ color: 'var(--color-text-muted)', fontSize: '1rem', maxWidth: '640px', margin: '0.5rem auto 0 auto' }}>
+            Sun-cured in small batches. <strong>Base Price ₹349/kg</strong> + <strong>₹1 per kg for every 4 days of aging</strong> for maximum depth & vintage flavor!
           </p>
         </div>
 
@@ -150,13 +150,23 @@ export default function ProductCatalog({
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.8rem' }}>
             {filteredProducts.map(product => {
               const currentSize = selectedSizes[product.id] || product.sizes[0];
+              const ageSurchargePerKg = calculateAgeSurchargePerKg(product.agedDays);
+              const price1kg = calculate1KgPrice(product.agedDays);
               
               return (
                 <div key={product.id} className="glass-card" style={{ display: 'flex', flexDirection: 'column', height: '100%', position: 'relative' }}>
                   
-                  {/* Top Aged Days Tag */}
-                  <div style={{ position: 'absolute', top: '12px', left: '12px', zIndex: 2, background: 'rgba(0, 0, 0, 0.65)', backdropFilter: 'blur(4px)', color: '#ffffff', padding: '0.2rem 0.6rem', borderRadius: 'var(--radius-full)', fontSize: '0.7rem', fontWeight: 700 }}>
-                    Aged {product.agedDays} Days
+                  {/* Top Badges (Aged Days & Batch Stock Limit) */}
+                  <div style={{ position: 'absolute', top: '12px', left: '12px', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
+                    <div style={{ background: 'rgba(0, 0, 0, 0.75)', backdropFilter: 'blur(4px)', color: '#fef08a', padding: '0.2rem 0.6rem', borderRadius: 'var(--radius-full)', fontSize: '0.7rem', fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+                      <Sun size={12} color="#fef08a" />
+                      <span>Aged {product.agedDays} Days (+₹{ageSurchargePerKg}/kg)</span>
+                    </div>
+
+                    <div style={{ background: 'rgba(185, 28, 28, 0.9)', color: '#ffffff', padding: '0.2rem 0.6rem', borderRadius: 'var(--radius-full)', fontSize: '0.7rem', fontWeight: 900, display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+                      <Package size={12} />
+                      <span>Stock Available: {product.stockKg} kg</span>
+                    </div>
                   </div>
 
                   {/* Quick View Button */}
@@ -202,15 +212,27 @@ export default function ProductCatalog({
                       {product.name}
                     </h3>
 
-                    <p style={{ fontSize: '0.825rem', color: 'var(--color-text-muted)', marginBottom: '1rem', flex: 1 }}>
+                    <p style={{ fontSize: '0.825rem', color: 'var(--color-text-muted)', marginBottom: '0.8rem', flex: 1 }}>
                       {product.subtitle}
                     </p>
 
+                    {/* Age Pricing Explanation Banner */}
+                    <div style={{ background: '#fefce8', border: '1px solid #fef08a', borderRadius: 'var(--radius-sm)', padding: '0.4rem 0.6rem', fontSize: '0.725rem', color: '#854d0e', marginBottom: '0.9rem', fontWeight: 700 }}>
+                      🏷️ Base ₹349/kg + ₹{ageSurchargePerKg}/kg ({product.agedDays}d @ +₹1/kg per 4d) = ₹{price1kg}/kg
+                    </div>
+
+
                     {/* Weight Options Selector */}
                     <div style={{ marginBottom: '1.2rem' }}>
-                      <label style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--color-text-muted)', display: 'block', marginBottom: '0.4rem' }}>
-                        Select Jar Size:
-                      </label>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
+                        <label style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--color-text-muted)' }}>
+                          Select Size:
+                        </label>
+                        <span style={{ fontSize: '0.7rem', color: 'var(--color-primary)', fontWeight: 800 }}>
+                          {product.stockKg} kg Batch
+                        </span>
+                      </div>
+
                       <div style={{ display: 'flex', gap: '0.4rem' }}>
                         {product.sizes.map(sz => {
                           const isSelected = currentSize.weight === sz.weight;
@@ -240,9 +262,12 @@ export default function ProductCatalog({
                     {/* Price & Add to Cart Footer */}
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid var(--color-card-border)', paddingTop: '0.8rem', marginTop: 'auto' }}>
                       <div>
-                        <span style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--color-text-main)' }}>
+                        <span style={{ fontSize: '1.25rem', fontWeight: 900, color: 'var(--color-text-main)' }}>
                           ₹{currentSize.price}
                         </span>
+                        <div style={{ fontSize: '0.68rem', color: 'var(--color-text-muted)', fontWeight: 600 }}>
+                          Includes {product.agedDays}d Aging
+                        </div>
                       </div>
 
                       <button
@@ -267,3 +292,4 @@ export default function ProductCatalog({
     </section>
   );
 }
+

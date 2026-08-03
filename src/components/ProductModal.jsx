@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { X, Star, Flame, ShieldCheck, Sun, ShoppingBag, Utensils, Check } from './Icons';
+import { X, Star, Flame, ShieldCheck, Sun, ShoppingBag, Utensils, Check, Package } from './Icons';
+import { BASE_PRICE_PER_KG, calculateAgeSurchargePerKg, calculate1KgPrice } from '../data/pickles';
 
 export default function ProductModal({ product, onClose, onAddToCart }) {
   if (!product) return null;
 
   const [selectedSize, setSelectedSize] = useState(product.sizes ? product.sizes[0] : { weight: '250g', price: product.price });
+  const ageSurchargePerKg = calculateAgeSurchargePerKg(product.agedDays);
+  const price1kg = calculate1KgPrice(product.agedDays);
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -23,8 +26,17 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
           <span style={{ fontSize: '5.5rem', filter: 'drop-shadow(0 10px 15px rgba(0,0,0,0.3))' }}>
             {product.emoji}
           </span>
-          <div style={{ position: 'absolute', bottom: '12px', left: '15px', background: 'rgba(0,0,0,0.6)', color: '#ffffff', padding: '0.25rem 0.75rem', borderRadius: 'var(--radius-full)', fontSize: '0.75rem', fontWeight: 700 }}>
-            Aged {product.agedDays} Days • Sun Dried
+          
+          <div style={{ position: 'absolute', bottom: '12px', left: '15px', display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+            <div style={{ background: 'rgba(0,0,0,0.7)', color: '#fef08a', padding: '0.25rem 0.75rem', borderRadius: 'var(--radius-full)', fontSize: '0.75rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+              <Sun size={14} color="#fef08a" />
+              <span>Aged {product.agedDays} Days • Sun Dried</span>
+            </div>
+
+            <div style={{ background: 'rgba(185, 28, 28, 0.95)', color: '#ffffff', padding: '0.25rem 0.75rem', borderRadius: 'var(--radius-full)', fontSize: '0.75rem', fontWeight: 900, display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+              <Package size={14} />
+              <span>Available Stock: {product.stockKg || 10} kg Total Batch</span>
+            </div>
           </div>
         </div>
 
@@ -42,6 +54,27 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
 
           <h2 style={{ fontSize: '1.8rem', fontWeight: 900, marginBottom: '0.2rem' }}>{product.name}</h2>
           <p style={{ color: 'var(--color-text-muted)', fontSize: '0.925rem', marginBottom: '1.2rem' }}>{product.subtitle}</p>
+
+          {/* Age Pricing & Stock Breakdown Card */}
+          <div style={{ background: 'linear-gradient(135deg, #fefce8 0%, #fef08a 100%)', border: '1px solid #fde047', borderRadius: 'var(--radius-md)', padding: '1rem', marginBottom: '1.4rem', color: '#713f12' }}>
+            <div style={{ fontWeight: 900, fontSize: '0.875rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.4rem' }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <Sun size={16} color="#b45309" />
+                <span>Vintage Aging Value Calculation</span>
+              </span>
+              <span style={{ background: '#b45309', color: '#ffffff', padding: '0.15rem 0.5rem', borderRadius: 'var(--radius-full)', fontSize: '0.7rem' }}>
+                +₹1/kg per 4 Days
+              </span>
+            </div>
+
+            <div style={{ fontSize: '0.825rem', lineHeight: 1.5, color: '#854d0e' }}>
+              • <strong>Base Price per Kg:</strong> ₹{BASE_PRICE_PER_KG}/kg<br />
+              • <strong>Sun-Cured Maturation ({product.agedDays} Days):</strong> +₹{ageSurchargePerKg}/kg (Calculated at +₹1 per kg for every 4 days passed)<br />
+              • <strong>Total 1 Kg Price:</strong> ₹{price1kg}/kg<br />
+              • <strong>Batch Quantity Available:</strong> <span style={{ color: '#991b1b', fontWeight: 900 }}>{product.stockKg || 10} kg available in current batch</span>
+            </div>
+          </div>
+
 
           <p style={{ fontSize: '0.95rem', color: 'var(--color-text-main)', marginBottom: '1.5rem', lineHeight: 1.6 }}>
             {product.description}
@@ -137,3 +170,4 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
     </div>
   );
 }
+

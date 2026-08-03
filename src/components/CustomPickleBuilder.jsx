@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, Flame, Check, ShoppingBag, Award } from './Icons';
+import { Sparkles, Flame, Check, ShoppingBag, Award, Sun } from './Icons';
 
 const BASES = [
   { id: 'mango', name: 'Raw Andhra Mango', icon: '🥭', price: 0 },
@@ -30,9 +30,13 @@ export default function CustomPickleBuilder({ onAddCustomJarToCart }) {
   const [heatLevel, setHeatLevel] = useState(3);
   const [jarName, setJarName] = useState('My Secret Artisanal Jar');
   const [jarSize, setJarSize] = useState('500g');
+  const [customAgeDays, setCustomAgeDays] = useState(40);
 
-  const basePrice = jarSize === '250g' ? 349 : jarSize === '500g' ? 599 : 1099;
-  const totalPrice = basePrice + selectedBase.price + selectedOil.price;
+  const weightKg = jarSize === '250g' ? 0.25 : jarSize === '500g' ? 0.5 : 1.0;
+  const basePricePerKg = 349;
+  const ageSurchargePerKg = Math.floor(customAgeDays / 4); // +1 RS per kg for every 4 days
+  const price1kg = basePricePerKg + ageSurchargePerKg + selectedBase.price + selectedOil.price;
+  const totalPrice = Math.round(price1kg * weightKg);
 
   const handleCreateJar = () => {
     const customProduct = {
@@ -43,20 +47,23 @@ export default function CustomPickleBuilder({ onAddCustomJarToCart }) {
       price: totalPrice,
       spiceLevel: heatLevel,
       spiceLabel: heatLevel <= 2 ? 'Mild' : heatLevel === 3 ? 'Medium Hot' : 'Fiery Hot',
-      agedDays: 30,
+      agedDays: customAgeDays,
       emoji: `${selectedBase.icon}🧪`,
-      description: `Custom handcrafted jar made with ${selectedBase.name}, ${selectedSpice.name}, steeped in ${selectedOil.name}. Heat intensity level ${heatLevel}/5.`,
+      description: `Custom handcrafted jar made with ${selectedBase.name}, ${selectedSpice.name}, steeped in ${selectedOil.name}. Aged for ${customAgeDays} days (+₹${ageSurchargePerKg}/kg aging rate).`,
       isCustom: true,
       customDetails: {
         base: selectedBase.name,
         spice: selectedSpice.name,
         oil: selectedOil.name,
-        heat: heatLevel
+        heat: heatLevel,
+        agedDays: customAgeDays
       }
     };
 
     onAddCustomJarToCart(customProduct, { weight: jarSize, price: totalPrice });
   };
+
+
 
   return (
     <section id="customizer" style={{ padding: '4rem 0', background: 'linear-gradient(180deg, var(--color-bg) 0%, #f7f1e3 100%)', borderTop: '1px solid var(--color-card-border)', borderBottom: '1px solid var(--color-card-border)' }}>

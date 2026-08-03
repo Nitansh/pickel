@@ -1,3 +1,29 @@
+export const BASE_PRICE_PER_KG = 349;
+export const DAYS_PER_RUPEE = 4;
+
+export function calculateAgeSurchargePerKg(agedDays) {
+  return Math.floor((agedDays || 0) / DAYS_PER_RUPEE);
+}
+
+export function calculate1KgPrice(agedDays) {
+  return BASE_PRICE_PER_KG + calculateAgeSurchargePerKg(agedDays);
+}
+
+export function getProductSizes(product) {
+  const price1kg = calculate1KgPrice(product.agedDays);
+  return [
+    { weight: '250g', weightKg: 0.25, price: Math.round(price1kg * 0.25) },
+    { weight: '500g', weightKg: 0.5, price: Math.round(price1kg * 0.5) },
+    { weight: '1kg', weightKg: 1.0, price: price1kg }
+  ];
+}
+
+export function getProductPrice(product, sizeWeight = '250g') {
+  const sizes = getProductSizes(product);
+  const found = sizes.find(s => s.weight === sizeWeight);
+  return found ? found.price : sizes[0].price;
+}
+
 export const PICKLE_CATEGORIES = [
   { id: 'all', name: 'All Signature Pickles', icon: '✨' },
   { id: 'mango', name: 'Mango', icon: '🥭' },
@@ -12,21 +38,22 @@ export const PICKLE_PRODUCTS = [
     name: 'Grandma’s Avakaya Raw Mango',
     subtitle: 'Classic Sun-Dried Raw Mango Pickle in Cold-Pressed Mustard Oil',
     category: 'mango',
-    price: 349,
+    basePricePerKg: BASE_PRICE_PER_KG,
+    agedDays: 48,
+    stockKg: 25, // 25kg batch available as requested
     rating: 4.9,
     reviewCount: 428,
     spiceLevel: 4,
     spiceLabel: 'Fiery Hot',
-    agedDays: 45,
     tag: 'Best Seller 🥭',
     oilType: 'Cold-Pressed Mustard Oil',
     dietary: ['100% Organic', 'Vegan', 'Preservative Free'],
-    description: 'Crisp raw Andhra mangoes cut into chunks, marinated in crushed Guntur red chilies, mustard seeds, fenugreek, and cold-pressed mustard oil. Sun-cured for 45 days.',
+    description: 'Crisp raw Andhra mangoes cut into chunks, marinated in crushed Guntur red chilies, mustard seeds, fenugreek, and cold-pressed mustard oil. Sun-cured for 48 days.',
     ingredients: ['Raw Andhra Mangoes', 'Cold-Pressed Mustard Oil', 'Guntur Red Chili Powder', 'Yellow Mustard Seeds', 'Fenugreek Powder', 'Himalayan Pink Salt', 'Asafoetida (Hing)'],
     sizes: [
-      { weight: '250g', price: 349 },
-      { weight: '500g', price: 629 },
-      { weight: '1kg', price: 1149 }
+      { weight: '250g', price: Math.round(calculate1KgPrice(48) * 0.25) }, // 90
+      { weight: '500g', price: Math.round(calculate1KgPrice(48) * 0.5) },  // 181
+      { weight: '1kg', price: calculate1KgPrice(48) }                       // 361
     ],
     imageBg: 'linear-gradient(135deg, #7f1d1d 0%, #b91c1c 50%, #d97706 100%)',
     emoji: '🥭🌶️',
@@ -37,21 +64,22 @@ export const PICKLE_PRODUCTS = [
     name: 'Vintage 2-Year Aged Sweet Lemon',
     subtitle: 'Slowly Matured for 2 Full Years (730 Days) in Sun-Warmed Terracotta',
     category: 'lemon',
-    price: 299,
+    basePricePerKg: BASE_PRICE_PER_KG,
+    agedDays: 730,
+    stockKg: 10, // 10kg batch available as requested
     rating: 4.9,
     reviewCount: 312,
     spiceLevel: 1,
     spiceLabel: 'Sweet & Mild',
-    agedDays: 730,
     tag: 'Aged 2 Years 🍋',
     oilType: 'Oil-Free Jaggery Brine',
     dietary: ['Zero Oil', 'Aged 2 Years', 'Digestive Goodness'],
     description: 'Juicy Kagzi lemons aged for 2 full years (730 days) under the warm sun. The peel gets dark, soft, and rich in organic jaggery, black salt, cardamom, and carom seeds. Tastes extraordinarily rich with age.',
     ingredients: ['2-Year Sun-Aged Kagzi Lemons', 'Organic Sugarcane Jaggery', 'Pink Rock Salt', 'Black Salt', 'Cardamom Powder', 'Roasted Cumin', 'Carom Seeds (Ajwain)'],
     sizes: [
-      { weight: '250g', price: 299 },
-      { weight: '500g', price: 549 },
-      { weight: '1kg', price: 999 }
+      { weight: '250g', price: Math.round(calculate1KgPrice(730) * 0.25) }, // 133
+      { weight: '500g', price: Math.round(calculate1KgPrice(730) * 0.5) },  // 266
+      { weight: '1kg', price: calculate1KgPrice(730) }                       // 531
     ],
     imageBg: 'linear-gradient(135deg, #78350f 0%, #b45309 50%, #f59e0b 100%)',
     emoji: '🍋🍯',
@@ -62,21 +90,22 @@ export const PICKLE_PRODUCTS = [
     name: 'Fiery Green Chili & Mustard',
     subtitle: 'Split Fresh Green Chilies Marinated in Mustard Oil',
     category: 'greenchili',
-    price: 279,
+    basePricePerKg: BASE_PRICE_PER_KG,
+    agedDays: 40,
+    stockKg: 10, // 10kg batch available as requested
     rating: 4.9,
     reviewCount: 285,
     spiceLevel: 4,
     spiceLabel: 'Fiery Hot',
-    agedDays: 30,
     tag: 'Spicy Favorite 🌶️',
     oilType: 'Cold-Pressed Mustard Oil',
     dietary: ['100% Natural', 'Gluten Free', 'Vegan'],
     description: 'Fresh farm-picked green chilies slit vertically and stuffed with coarse yellow mustard seeds, crushed fennel, turmeric, and cold-pressed Kachi Ghani mustard oil.',
     ingredients: ['Farm-Fresh Green Chilies', 'Yellow Mustard Seeds', 'Kachi Ghani Mustard Oil', 'Fennel Powder (Saunf)', 'Dry Mango Powder (Amchur)', 'Turmeric', 'Pink Salt'],
     sizes: [
-      { weight: '250g', price: 279 },
-      { weight: '500g', price: 499 },
-      { weight: '1kg', price: 899 }
+      { weight: '250g', price: Math.round(calculate1KgPrice(40) * 0.25) }, // 90
+      { weight: '500g', price: Math.round(calculate1KgPrice(40) * 0.5) },  // 180
+      { weight: '1kg', price: calculate1KgPrice(40) }                       // 359
     ],
     imageBg: 'linear-gradient(135deg, #14532d 0%, #15803d 50%, #84cc16 100%)',
     emoji: '🌶️✨',
@@ -87,27 +116,30 @@ export const PICKLE_PRODUCTS = [
     name: 'Stuffed Benarasi Red Chili',
     subtitle: 'Whole Plump Red Peppers Stuffed with 12 Heritage Spices',
     category: 'redchili',
-    price: 389,
+    basePricePerKg: BASE_PRICE_PER_KG,
+    agedDays: 60,
+    stockKg: 10, // 10kg batch available as requested
     rating: 5.0,
     reviewCount: 390,
     spiceLevel: 5,
     spiceLabel: 'Royal Heat 🔥',
-    agedDays: 50,
     tag: 'Royal Heritage 👑',
     oilType: 'Pure Mustard Oil',
     dietary: ['Handcrafted', 'Heritage Recipe', 'No Water Added'],
-    description: 'Thick, vibrant Benarasi red chilies hand-stuffed with a fragrant 12-spice mixture including dry mango powder, fennel, mustard, and aged mustard oil.',
+    description: 'Thick, vibrant Banarasi red chilies hand-stuffed with a fragrant 12-spice mixture including dry mango powder, fennel, mustard, and aged mustard oil.',
     ingredients: ['Banarasi Thick Red Chilies', 'Amchur (Dry Mango Powder)', 'Saunf (Fennel)', 'Ajwain', 'Mustard Powder', 'Mustard Oil', 'Rock Salt', 'Hing'],
     sizes: [
-      { weight: '250g', price: 389 },
-      { weight: '500g', price: 699 },
-      { weight: '1kg', price: 1249 }
+      { weight: '250g', price: Math.round(calculate1KgPrice(60) * 0.25) }, // 91
+      { weight: '500g', price: Math.round(calculate1KgPrice(60) * 0.5) },  // 182
+      { weight: '1kg', price: calculate1KgPrice(60) }                       // 364
     ],
     imageBg: 'linear-gradient(135deg, #450a0a 0%, #7f1d1d 50%, #dc2626 100%)',
     emoji: '🌶️👑',
     inStock: true
   }
 ];
+
+
 
 export const SUBSCRIPTION_PLANS = [
   {
