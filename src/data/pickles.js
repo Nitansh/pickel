@@ -1,20 +1,34 @@
-export const BASE_PRICE_PER_KG = 349;
+export const BASE_PRICE_250G = 200;
 export const DAYS_PER_RUPEE = 4;
 
 export function calculateAgeSurchargePerKg(agedDays) {
   return Math.floor((agedDays || 0) / DAYS_PER_RUPEE);
 }
 
-export function calculate1KgPrice(agedDays) {
-  return BASE_PRICE_PER_KG + calculateAgeSurchargePerKg(agedDays);
-}
-
 export function getProductSizes(product) {
-  const price1kg = calculate1KgPrice(product.agedDays);
+  const ageSurchargePerKg = calculateAgeSurchargePerKg(product.agedDays);
   return [
-    { weight: '250g', weightKg: 0.25, price: Math.round(price1kg * 0.25) },
-    { weight: '500g', weightKg: 0.5, price: Math.round(price1kg * 0.5) },
-    { weight: '1kg', weightKg: 1.0, price: price1kg }
+    { 
+      weight: '250g', 
+      weightKg: 0.25, 
+      basePrice: 200,
+      ageSurcharge: Math.round(ageSurchargePerKg * 0.25),
+      price: 200 + Math.round(ageSurchargePerKg * 0.25) 
+    },
+    { 
+      weight: '500g', 
+      weightKg: 0.5, 
+      basePrice: 400,
+      ageSurcharge: Math.round(ageSurchargePerKg * 0.5),
+      price: 400 + Math.round(ageSurchargePerKg * 0.5) 
+    },
+    { 
+      weight: '1kg', 
+      weightKg: 1.0, 
+      basePrice: 800,
+      ageSurcharge: ageSurchargePerKg,
+      price: 800 + ageSurchargePerKg 
+    }
   ];
 }
 
@@ -38,7 +52,7 @@ export const PICKLE_PRODUCTS = [
     name: 'Grandma’s Avakaya Raw Mango',
     subtitle: 'Classic Sun-Dried Raw Mango Pickle in Cold-Pressed Mustard Oil',
     category: 'mango',
-    basePricePerKg: BASE_PRICE_PER_KG,
+    basePrice250g: BASE_PRICE_250G,
     agedDays: 48,
     stockKg: 25, // 25kg batch available as requested
     rating: 4.9,
@@ -51,9 +65,9 @@ export const PICKLE_PRODUCTS = [
     description: 'Crisp raw Andhra mangoes cut into chunks, marinated in crushed Guntur red chilies, mustard seeds, fenugreek, and cold-pressed mustard oil. Sun-cured for 48 days.',
     ingredients: ['Raw Andhra Mangoes', 'Cold-Pressed Mustard Oil', 'Guntur Red Chili Powder', 'Yellow Mustard Seeds', 'Fenugreek Powder', 'Himalayan Pink Salt', 'Asafoetida (Hing)'],
     sizes: [
-      { weight: '250g', price: Math.round(calculate1KgPrice(48) * 0.25) }, // 90
-      { weight: '500g', price: Math.round(calculate1KgPrice(48) * 0.5) },  // 181
-      { weight: '1kg', price: calculate1KgPrice(48) }                       // 361
+      { weight: '250g', price: 203 }, // 200 + 3
+      { weight: '500g', price: 406 }, // 400 + 6
+      { weight: '1kg', price: 812 }   // 800 + 12
     ],
     imageBg: 'linear-gradient(135deg, #7f1d1d 0%, #b91c1c 50%, #d97706 100%)',
     emoji: '🥭🌶️',
@@ -64,7 +78,7 @@ export const PICKLE_PRODUCTS = [
     name: 'Vintage 2-Year Aged Sweet Lemon',
     subtitle: 'Slowly Matured for 2 Full Years (730 Days) in Sun-Warmed Terracotta',
     category: 'lemon',
-    basePricePerKg: BASE_PRICE_PER_KG,
+    basePrice250g: BASE_PRICE_250G,
     agedDays: 730,
     stockKg: 10, // 10kg batch available as requested
     rating: 4.9,
@@ -77,9 +91,9 @@ export const PICKLE_PRODUCTS = [
     description: 'Juicy Kagzi lemons aged for 2 full years (730 days) under the warm sun. The peel gets dark, soft, and rich in organic jaggery, black salt, cardamom, and carom seeds. Tastes extraordinarily rich with age.',
     ingredients: ['2-Year Sun-Aged Kagzi Lemons', 'Organic Sugarcane Jaggery', 'Pink Rock Salt', 'Black Salt', 'Cardamom Powder', 'Roasted Cumin', 'Carom Seeds (Ajwain)'],
     sizes: [
-      { weight: '250g', price: Math.round(calculate1KgPrice(730) * 0.25) }, // 133
-      { weight: '500g', price: Math.round(calculate1KgPrice(730) * 0.5) },  // 266
-      { weight: '1kg', price: calculate1KgPrice(730) }                       // 531
+      { weight: '250g', price: 246 }, // 200 + 46
+      { weight: '500g', price: 491 }, // 400 + 91
+      { weight: '1kg', price: 982 }   // 800 + 182
     ],
     imageBg: 'linear-gradient(135deg, #78350f 0%, #b45309 50%, #f59e0b 100%)',
     emoji: '🍋🍯',
@@ -90,7 +104,7 @@ export const PICKLE_PRODUCTS = [
     name: 'Fiery Green Chili & Mustard',
     subtitle: 'Split Fresh Green Chilies Marinated in Mustard Oil',
     category: 'greenchili',
-    basePricePerKg: BASE_PRICE_PER_KG,
+    basePrice250g: BASE_PRICE_250G,
     agedDays: 40,
     stockKg: 10, // 10kg batch available as requested
     rating: 4.9,
@@ -103,9 +117,9 @@ export const PICKLE_PRODUCTS = [
     description: 'Fresh farm-picked green chilies slit vertically and stuffed with coarse yellow mustard seeds, crushed fennel, turmeric, and cold-pressed Kachi Ghani mustard oil.',
     ingredients: ['Farm-Fresh Green Chilies', 'Yellow Mustard Seeds', 'Kachi Ghani Mustard Oil', 'Fennel Powder (Saunf)', 'Dry Mango Powder (Amchur)', 'Turmeric', 'Pink Salt'],
     sizes: [
-      { weight: '250g', price: Math.round(calculate1KgPrice(40) * 0.25) }, // 90
-      { weight: '500g', price: Math.round(calculate1KgPrice(40) * 0.5) },  // 180
-      { weight: '1kg', price: calculate1KgPrice(40) }                       // 359
+      { weight: '250g', price: 203 }, // 200 + 3
+      { weight: '500g', price: 405 }, // 400 + 5
+      { weight: '1kg', price: 810 }   // 800 + 10
     ],
     imageBg: 'linear-gradient(135deg, #14532d 0%, #15803d 50%, #84cc16 100%)',
     emoji: '🌶️✨',
@@ -116,7 +130,7 @@ export const PICKLE_PRODUCTS = [
     name: 'Stuffed Benarasi Red Chili',
     subtitle: 'Whole Plump Red Peppers Stuffed with 12 Heritage Spices',
     category: 'redchili',
-    basePricePerKg: BASE_PRICE_PER_KG,
+    basePrice250g: BASE_PRICE_250G,
     agedDays: 60,
     stockKg: 10, // 10kg batch available as requested
     rating: 5.0,
@@ -129,15 +143,16 @@ export const PICKLE_PRODUCTS = [
     description: 'Thick, vibrant Banarasi red chilies hand-stuffed with a fragrant 12-spice mixture including dry mango powder, fennel, mustard, and aged mustard oil.',
     ingredients: ['Banarasi Thick Red Chilies', 'Amchur (Dry Mango Powder)', 'Saunf (Fennel)', 'Ajwain', 'Mustard Powder', 'Mustard Oil', 'Rock Salt', 'Hing'],
     sizes: [
-      { weight: '250g', price: Math.round(calculate1KgPrice(60) * 0.25) }, // 91
-      { weight: '500g', price: Math.round(calculate1KgPrice(60) * 0.5) },  // 182
-      { weight: '1kg', price: calculate1KgPrice(60) }                       // 364
+      { weight: '250g', price: 204 }, // 200 + 4
+      { weight: '500g', price: 408 }, // 400 + 8
+      { weight: '1kg', price: 815 }   // 800 + 15
     ],
     imageBg: 'linear-gradient(135deg, #450a0a 0%, #7f1d1d 50%, #dc2626 100%)',
     emoji: '🌶️👑',
     inStock: true
   }
 ];
+
 
 
 

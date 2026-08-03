@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { PICKLE_CATEGORIES, PICKLE_PRODUCTS, BASE_PRICE_PER_KG, calculateAgeSurchargePerKg, calculate1KgPrice } from '../data/pickles';
+import { PICKLE_CATEGORIES, PICKLE_PRODUCTS, BASE_PRICE_250G, calculateAgeSurchargePerKg, getProductSizes } from '../data/pickles';
 import { Flame, Star, Eye, ShoppingBag, Filter, Check, Package, Sun } from './Icons';
 
 export default function ProductCatalog({ 
@@ -59,7 +59,7 @@ export default function ProductCatalog({
           </div>
           <h2 style={{ fontSize: '2.4rem', fontWeight: 900 }}>The Pickle Pantry</h2>
           <p style={{ color: 'var(--color-text-muted)', fontSize: '1rem', maxWidth: '640px', margin: '0.5rem auto 0 auto' }}>
-            Sun-cured in small batches. <strong>Base Price ₹349/kg</strong> + <strong>₹1 per kg for every 4 days of aging</strong> for maximum depth & vintage flavor!
+            Sun-cured in small batches. <strong>Base Price ₹200 / 250g</strong> + <strong>₹1 per kg for every 4 days of aging</strong> for maximum depth & vintage flavor!
           </p>
         </div>
 
@@ -149,9 +149,9 @@ export default function ProductCatalog({
         ) : (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.8rem' }}>
             {filteredProducts.map(product => {
-              const currentSize = selectedSizes[product.id] || product.sizes[0];
+              const sizes = getProductSizes(product);
+              const currentSize = selectedSizes[product.id] || sizes[0];
               const ageSurchargePerKg = calculateAgeSurchargePerKg(product.agedDays);
-              const price1kg = calculate1KgPrice(product.agedDays);
               
               return (
                 <div key={product.id} className="glass-card" style={{ display: 'flex', flexDirection: 'column', height: '100%', position: 'relative' }}>
@@ -218,8 +218,9 @@ export default function ProductCatalog({
 
                     {/* Age Pricing Explanation Banner */}
                     <div style={{ background: '#fefce8', border: '1px solid #fef08a', borderRadius: 'var(--radius-sm)', padding: '0.4rem 0.6rem', fontSize: '0.725rem', color: '#854d0e', marginBottom: '0.9rem', fontWeight: 700 }}>
-                      🏷️ Base ₹349/kg + ₹{ageSurchargePerKg}/kg ({product.agedDays}d @ +₹1/kg per 4d) = ₹{price1kg}/kg
+                      🏷️ Base ₹200 (250g) + ₹{currentSize.ageSurcharge || 0} aging (+₹1/kg per 4d)
                     </div>
+
 
 
                     {/* Weight Options Selector */}

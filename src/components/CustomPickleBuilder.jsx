@@ -33,10 +33,10 @@ export default function CustomPickleBuilder({ onAddCustomJarToCart }) {
   const [customAgeDays, setCustomAgeDays] = useState(40);
 
   const weightKg = jarSize === '250g' ? 0.25 : jarSize === '500g' ? 0.5 : 1.0;
-  const basePricePerKg = 349;
+  const baseJarPrice = jarSize === '250g' ? 200 : jarSize === '500g' ? 400 : 800;
   const ageSurchargePerKg = Math.floor(customAgeDays / 4); // +1 RS per kg for every 4 days
-  const price1kg = basePricePerKg + ageSurchargePerKg + selectedBase.price + selectedOil.price;
-  const totalPrice = Math.round(price1kg * weightKg);
+  const ageSurchargeForJar = Math.round(ageSurchargePerKg * weightKg);
+  const totalPrice = baseJarPrice + selectedBase.price + selectedOil.price + ageSurchargeForJar;
 
   const handleCreateJar = () => {
     const customProduct = {
@@ -49,7 +49,7 @@ export default function CustomPickleBuilder({ onAddCustomJarToCart }) {
       spiceLabel: heatLevel <= 2 ? 'Mild' : heatLevel === 3 ? 'Medium Hot' : 'Fiery Hot',
       agedDays: customAgeDays,
       emoji: `${selectedBase.icon}🧪`,
-      description: `Custom handcrafted jar made with ${selectedBase.name}, ${selectedSpice.name}, steeped in ${selectedOil.name}. Aged for ${customAgeDays} days (+₹${ageSurchargePerKg}/kg aging rate).`,
+      description: `Custom handcrafted jar made with ${selectedBase.name}, ${selectedSpice.name}, steeped in ${selectedOil.name}. Aged for ${customAgeDays} days (+₹${ageSurchargeForJar} aging rate).`,
       isCustom: true,
       customDetails: {
         base: selectedBase.name,
@@ -62,6 +62,7 @@ export default function CustomPickleBuilder({ onAddCustomJarToCart }) {
 
     onAddCustomJarToCart(customProduct, { weight: jarSize, price: totalPrice });
   };
+
 
 
 

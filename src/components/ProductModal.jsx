@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { X, Star, Flame, ShieldCheck, Sun, ShoppingBag, Utensils, Check, Package } from './Icons';
-import { BASE_PRICE_PER_KG, calculateAgeSurchargePerKg, calculate1KgPrice } from '../data/pickles';
+import { BASE_PRICE_250G, calculateAgeSurchargePerKg, getProductSizes } from '../data/pickles';
 
 export default function ProductModal({ product, onClose, onAddToCart }) {
   if (!product) return null;
 
-  const [selectedSize, setSelectedSize] = useState(product.sizes ? product.sizes[0] : { weight: '250g', price: product.price });
+  const sizes = getProductSizes(product);
+  const [selectedSize, setSelectedSize] = useState(sizes[0]);
   const ageSurchargePerKg = calculateAgeSurchargePerKg(product.agedDays);
-  const price1kg = calculate1KgPrice(product.agedDays);
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -68,12 +68,13 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
             </div>
 
             <div style={{ fontSize: '0.825rem', lineHeight: 1.5, color: '#854d0e' }}>
-              • <strong>Base Price per Kg:</strong> ₹{BASE_PRICE_PER_KG}/kg<br />
-              • <strong>Sun-Cured Maturation ({product.agedDays} Days):</strong> +₹{ageSurchargePerKg}/kg (Calculated at +₹1 per kg for every 4 days passed)<br />
-              • <strong>Total 1 Kg Price:</strong> ₹{price1kg}/kg<br />
+              • <strong>Base Price:</strong> ₹200 for 250g (₹800/kg base)<br />
+              • <strong>Sun-Cured Maturation ({product.agedDays} Days):</strong> +₹{ageSurchargePerKg}/kg (+₹1/kg for every 4 days passed)<br />
+              • <strong>Selected {selectedSize.weight} Price:</strong> ₹{selectedSize.basePrice} base + ₹{selectedSize.ageSurcharge} aging = <strong>₹{selectedSize.price}</strong><br />
               • <strong>Batch Quantity Available:</strong> <span style={{ color: '#991b1b', fontWeight: 900 }}>{product.stockKg || 10} kg available in current batch</span>
             </div>
           </div>
+
 
 
           <p style={{ fontSize: '0.95rem', color: 'var(--color-text-main)', marginBottom: '1.5rem', lineHeight: 1.6 }}>
